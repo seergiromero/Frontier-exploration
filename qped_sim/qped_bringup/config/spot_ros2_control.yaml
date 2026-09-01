@@ -1,0 +1,64 @@
+# Copyright (C) Angel Santamaria Navarro 
+# All Rights Reserved 2024
+# Unauthorized copying of this file, via any medium is strictly prohibited
+# Proprietary and confidential
+
+controller_manager:
+  ros__parameters:
+    update_rate: 1000
+    use_sim_time: true
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+joint_state_broadcaster:
+  ros__parameters:
+    publish_rate: 100.0
+
+joint_trajectory_controller:   
+  ros__parameters:
+    state_publish_rate: 100.0 # Defaults to 50
+    action_monitor_rate: 100.0 # Defaults to 20
+    joints:
+      - spot/front_left_hip_x
+      - spot/front_left_hip_y
+      - spot/front_left_knee
+      - spot/front_right_hip_x
+      - spot/front_right_hip_y
+      - spot/front_right_knee
+      - spot/rear_left_hip_x
+      - spot/rear_left_hip_y
+      - spot/rear_left_knee
+      - spot/rear_right_hip_x
+      - spot/rear_right_hip_y
+      - spot/rear_right_knee
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+
+    allow_partial_joints_goal: false # Defaults to false
+    open_loop_control: true
+    allow_integration_in_goal_trajectories: false
+    allow_nonzero_velocity_at_trajectory_end: false
+    constraints:
+      stopped_velocity_tolerance: 0.01 # Defaults to 0.01
+      goal_time: 0.0 # Defaults to 0.0 (start immediately)   
+    gains:
+      spot/front_left_hip_x  : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000, i_clamp_max: 1000}
+      spot/front_left_hip_y  : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000, i_clamp_max: 1000}
+      spot/front_left_knee   : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000, i_clamp_max: 1000}
+      spot/front_right_hip_x : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000, i_clamp_max: 1000}
+      spot/front_right_hip_y : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000, i_clamp_max: 1000}
+      spot/front_right_knee  : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000, i_clamp_max: 1000}
+      spot/rear_left_hip_x   : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000, i_clamp_max: 1000}
+      spot/rear_left_hip_y   : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000, i_clamp_max: 1000}
+      spot/rear_left_knee    : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000, i_clamp_max: 1000}
+      spot/rear_right_hip_x  : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000, i_clamp_max: 1000}
+      spot/rear_right_hip_y  : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000, i_clamp_max: 1000}
+      spot/rear_right_knee   : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000, i_clamp_max: 1000}
+   #   {p: 250.0, i: 0.2, d: 5.0} --> previously

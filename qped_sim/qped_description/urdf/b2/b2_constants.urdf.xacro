@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:property name="base_to_hip_x" value="0.3285" />
+    <xacro:property name="base_to_hip_y" value="0.072" />
+
+    <xacro:property name="hip_mass" value="2.673" />
+    <xacro:property name="hip_inertial_x" value="0.003841" />
+    <xacro:property name="hip_inertial_y" value="0.009068" />
+    <xacro:property name="hip_collision_y" value="0.12" />
+
+    <xacro:property name="thigh_mass" value="4.536" />
+    <xacro:property name="thigh_inertial_y" value="0.032049" />
+    <xacro:property name="hip_to_thigh_y" value="0.11973" />
+
+    <xacro:property name="calf_mass" value="2.2906" />
+    <xacro:property name="calf_inertial_y" value="0.017301" />
+    <xacro:property name="thigh_to_calf_y" value="8.8203E-05" />
+
+    <xacro:property name="foot_mass" value="1.083" />
+    <xacro:property name="foot_inertial_y" value="0.051053" />
+
+    <xacro:property name="lower_leg_to_foot_z" value="0.01" />
+</robot>

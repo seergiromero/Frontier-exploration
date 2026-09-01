@@ -1,0 +1,32 @@
+# Copyright (C) Angel Santamaria Navarro 
+# All Rights Reserved 2024
+# Unauthorized copying of this file, via any medium is strictly prohibited
+# Proprietary and confidential
+
+/**:
+  ros__parameters:
+    gait:
+      calf_orientation: ">>"
+      pantograph_leg: false
+      odom_scaler: 0.9
+      max_linear_velocity_x: 0.50
+      max_linear_velocity_y: 0.25
+      max_angular_velocity_z: 0.2
+      com_x_translation: 0.0
+      swing_height: 0.04
+      stance_depth: 0.00
+      stance_duration: 0.5
+      nominal_height: 0.4
+    loop_rate: 1000.0
+    use_sim_time: true
+    base: b2/base_link
+    # LINKS for B2
+    left_front_links: ["b2/FL_hip", "b2/FL_thigh", "b2/FL_calf", "b2/FL_foot"]
+    left_hind_links: ["b2/RL_hip", "b2/RL_thigh", "b2/RL_calf", "b2/RL_foot"]
+    right_front_links: ["b2/FR_hip", "b2/FR_thigh", "b2/FR_calf", "b2/FR_foot"]
+    right_hind_links: ["b2/RR_hip", "b2/RR_thigh", "b2/RR_calf", "b2/RR_foot"]
+    # JOINTS for B2
+    left_front_joints: ["b2/FL_hip_joint", "b2/FL_thigh_joint", "b2/FL_calf_joint"]
+    left_hind_joints: ["b2/RL_hip_joint", "b2/RL_thigh_joint", "b2/RL_calf_joint"]
+    right_front_joints: ["b2/FR_hip_joint", "b2/FR_thigh_joint", "b2/FR_calf_joint"]
+    right_hind_joints: ["b2/RR_hip_joint", "b2/RR_thigh_joint", "b2/RR_calf_joint"]

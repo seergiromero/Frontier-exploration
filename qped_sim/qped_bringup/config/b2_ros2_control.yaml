@@ -1,0 +1,72 @@
+# Copyright (C) Angel Santamaria Navarro 
+# All Rights Reserved 2024
+# Unauthorized copying of this file, via any medium is strictly prohibited
+# Proprietary and confidential
+
+controller_manager:
+  ros__parameters:
+    update_rate: 1000
+    use_sim_time: true
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    ros__logging:
+      ros__logger_level: error
+
+joint_state_broadcaster:
+  ros__parameters:
+    publish_rate: 1000
+    ros__logging:
+      ros__logger_level: error
+
+
+joint_trajectory_controller:   
+  ros__parameters:
+    state_publish_rate: 100.0 # Defaults to 50
+    action_monitor_rate: 50.0 # Defaults to 20
+    joints:
+      - b2/FL_hip_joint
+      - b2/FL_thigh_joint
+      - b2/FL_calf_joint
+      - b2/FR_hip_joint
+      - b2/FR_thigh_joint
+      - b2/FR_calf_joint
+      - b2/RL_hip_joint
+      - b2/RL_thigh_joint
+      - b2/RL_calf_joint
+      - b2/RR_hip_joint
+      - b2/RR_thigh_joint
+      - b2/RR_calf_joint
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+
+    allow_partial_joints_goal: false # Defaults to false
+    open_loop_control: true
+    allow_integration_in_goal_trajectories: false
+    allow_nonzero_velocity_at_trajectory_end: false
+    constraints:
+      stopped_velocity_tolerance: 0.01 # Defaults to 0.01
+      goal_time: 0.0 # Defaults to 0.0 (start immediately)   
+    gains:
+      b2/FL_hip_joint  : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000.0, i_clamp_max: 1000.0}
+      b2/FL_thigh_joint  : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000.0, i_clamp_max: 1000.0}
+      b2/FL_calf_joint   : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000.0, i_clamp_max: 1000.0}
+      b2/FR_hip_joint : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000.0, i_clamp_max: 1000.0}
+      b2/FR_thigh_joint : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000.0, i_clamp_max: 1000.0}
+      b2/FR_calf_joint  : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000.0, i_clamp_max: 1000.0}
+      b2/RL_hip_joint   : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000.0, i_clamp_max: 1000.0}
+      b2/RL_thigh_joint   : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000.0, i_clamp_max: 1000.0}
+      b2/RL_calf_joint    : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000.0, i_clamp_max: 1000.0}
+      b2/RR_hip_joint  : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000.0, i_clamp_max: 1000.0}
+      b2/RR_thigh_joint  : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000.0, i_clamp_max: 1000.0}
+      b2/RR_calf_joint   : {p: 50.0, i: 0.05, d: 1.0, i_clamp_min:  -1000.0, i_clamp_max: 1000.0}
+
+    ros__logging:
+        ros__logger_level: error

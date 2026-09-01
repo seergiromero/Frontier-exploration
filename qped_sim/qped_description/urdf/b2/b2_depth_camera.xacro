@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:macro name="b2_depth_camera" params="prefix name camera_link visualize:=0" >
+
+        <gazebo reference="${prefix}${camera_link}_optical_frame">
+            <!-- Grayscale camera -->
+            <sensor name="${prefix}${camera_link}_optical_frame" type="camera">
+                <pose>0 0 0 0 0 0</pose>
+                <update_rate>30</update_rate>
+                <visualize>${visualize}</visualize>
+                <topic>/model/${prefix}${name}/depth/image_raw</topic>
+                <frame_id>${prefix}${camera_link}_optical_frame</frame_id>
+                <gz_frame_id>${prefix}${camera_link}_optical_frame</gz_frame_id>
+                <camera name="d435">
+                    <horizontal_fov>${radians(102.35)}</horizontal_fov> <!-- computed from real fx -->
+                    <image>
+                        <width>640</width>
+                        <height>480</height>
+                        <format>R8G8B8</format>
+                    </image>
+                    <clip>
+                        <near>0.1</near>
+                        <far>20.0</far>
+                    </clip>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.007</stddev>
+                    </noise>
+                    <lens>
+                        <intrinsics>
+                            <fx>257.4866</fx> <!-- from real Spot of CoSTAR -->
+                            <fy>257.4866</fy> <!-- =fx; real Spot has 256.9733 -->
+                            <cx>319.5</cx> <!-- ideal value -->
+                            <cy>239.5</cy> <!-- ideal value -->
+                            <s>0</s>
+                        </intrinsics>
+                    </lens>
+                </camera>
+            </sensor>
+        </gazebo>
+        <gazebo reference="${prefix}${camera_link}_depth_frame">
+            <sensor name="${prefix}${camera_link}_depth_frame" type="depth_camera">
+                <pose>0 0 0 0 0 0</pose>
+                <update_rate>30</update_rate>
+                <visualize>${visualize}</visualize>
+                <topic>/model/${prefix}${name}/depth/disparity</topic>
+                <frame_id>${prefix}${camera_link}_depth_frame</frame_id>
+                <gz_frame_id>${prefix}${camera_link}_depth_frame</gz_frame_id>
+                <camera>
+                    <horizontal_fov>${radians(102.35)}</horizontal_fov> <!-- put here equal to mono cam -->
+                    <image>
+                        <width>424</width>
+                        <height>240</height>
+                        <format>R_FLOAT32</format>
+                    </image>
+                    <clip>
+                        <near>0.1</near>
+                        <far>4.0</far>
+                    </clip>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.007</stddev>
+                    </noise>
+                    <lens>
+                        <intrinsics>
+                            <fx>257.4866</fx> <!-- from real Spot of CoSTAR -->
+                            <fy>257.4866</fy> <!-- =fx; real Spot has 256.9733 -->
+                            <cx>319.5</cx> <!-- ideal value -->
+                            <cy>239.5</cy> <!-- ideal value -->
+                            <s>0</s>
+                        </intrinsics>
+                    </lens>
+                </camera>
+            </sensor>
+        </gazebo>
+    </xacro:macro>
+</robot>

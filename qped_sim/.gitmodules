@@ -1,0 +1,11 @@
+[submodule "include/fast_LIMO"]
+	path = include/fast_LIMO
+	url = https://github.com/fetty31/fast_LIMO.git
+	branch = ros2-humble
+[submodule "include/LIO-SAM"]
+	path = include/LIO-SAM
+	url = https://github.com/angelsantamaria/LIO-SAM.git
+	branch = ros2_gtsam4.2
+[submodule "include/voxelMap"]
+	path = include/voxelMap
+	url = git@github.com:JaumeAlbardaner/Map-Conversion-3D-Voxel-Map-to-2D-Occupancy-Map.git

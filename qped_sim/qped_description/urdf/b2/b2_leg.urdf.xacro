@@ -1,0 +1,239 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:arg name="max_hip_effort" default="200" />
+    <xacro:arg name="max_hip_velocity" default="23" />
+    <xacro:arg name="max_thigh_effort" default="200" />
+    <xacro:arg name="max_thigh_velocity" default="23" />
+    <xacro:arg name="max_calf_effort" default="320" />
+    <xacro:arg name="max_calf_velocity" default="14" />
+    <xacro:arg name="max_foot_effort" default="20" />
+    <xacro:arg name="max_foot_velocity" default="50" />
+
+    <xacro:macro name="b2_leg" params="leg_name prefix">
+
+        <xacro:if value="${leg_name == 'FL'}">
+            <xacro:property name="base_to_hip_xyz" value="${base_to_hip_x} ${base_to_hip_y} 0" />
+            <xacro:property name="hip_inertial_xyz" value="-${hip_inertial_x} -${hip_inertial_y} 0" />
+            <xacro:property name="hip_collision" value="0 ${hip_collision_y} 0" />
+            <xacro:property name="thigh_inertial_xyz" value="-0.006279 -${thigh_inertial_y} -0.057835" />
+            <xacro:property name="thigh_inertial_xy" value="0.00087781" />
+            <xacro:property name="thigh_inertial_yz" value="0.0083537" />
+            <xacro:property name="hip_to_thigh_xyz" value="0 ${hip_to_thigh_y} 0" />
+            <xacro:property name="calf_inertial_xyz" value="0.005278 ${calf_inertial_y} -0.29778" />
+            <xacro:property name="calf_inertial_xy" value="0.000221" />
+            <xacro:property name="calf_inertial_yz" value="0.002093" />
+            <xacro:property name="thigh_to_calf_xyz" value="0 -${thigh_to_calf_y} -0.35" />
+            <xacro:property name="foot_inertial_xyz" value="-0.000991 ${foot_inertial_y} -0.00113" />
+            <xacro:property name="foot_inertial_xy" value="6E-06" />
+            <xacro:property name="foot_inertial_yz" value="7E-06" />
+        </xacro:if>
+        <xacro:if value="${leg_name == 'FR'}">
+            <xacro:property name="base_to_hip_xyz" value="${base_to_hip_x} -${base_to_hip_y} 0" />
+            <xacro:property name="hip_inertial_xyz" value="-${hip_inertial_x} ${hip_inertial_y} 0" />
+            <xacro:property name="hip_collision" value="0 -${hip_collision_y} 0" />
+            <xacro:property name="thigh_inertial_xyz" value="-0.006279 ${thigh_inertial_y} -0.057835" />
+            <xacro:property name="thigh_inertial_xy" value="-0.00087781" />
+            <xacro:property name="thigh_inertial_yz" value="-0.0083537" />
+            <xacro:property name="hip_to_thigh_xyz" value="0 -${hip_to_thigh_y} 0" />
+            <xacro:property name="calf_inertial_xyz" value="0.005278 -${calf_inertial_y} -0.29778" />
+            <xacro:property name="calf_inertial_xy" value="-0.000221" />
+            <xacro:property name="calf_inertial_yz" value="-0.002093" />
+            <xacro:property name="thigh_to_calf_xyz" value="0 ${thigh_to_calf_y} -0.35" />
+            <xacro:property name="foot_inertial_xyz" value="-0.000991 -${foot_inertial_y} -0.00113" />
+            <xacro:property name="foot_inertial_xy" value="-6E-06" />
+            <xacro:property name="foot_inertial_yz" value="-7E-06" />
+        </xacro:if>
+        <xacro:if value="${leg_name == 'RL'}">
+            <xacro:property name="base_to_hip_xyz" value="-${base_to_hip_x} ${base_to_hip_y} 0" />
+            <xacro:property name="hip_inertial_xyz" value="${hip_inertial_x} -${hip_inertial_y} 0" />
+            <xacro:property name="hip_collision" value="0 ${hip_collision_y} 0" />
+            <xacro:property name="thigh_inertial_xyz" value="-0.006279 -${thigh_inertial_y} -0.057835" />
+            <xacro:property name="thigh_inertial_xy" value="0.00087781" />
+            <xacro:property name="thigh_inertial_yz" value="0.0083537" />           
+            <xacro:property name="hip_to_thigh_xyz" value="0 ${hip_to_thigh_y} 0" />
+            <xacro:property name="calf_inertial_xyz" value="0.005278 ${calf_inertial_y} -0.29778" />
+            <xacro:property name="calf_inertial_xy" value="0.000221" />
+            <xacro:property name="calf_inertial_yz" value="0.002093" />
+            <xacro:property name="thigh_to_calf_xyz" value="0 -${thigh_to_calf_y} -0.35" />
+            <xacro:property name="foot_inertial_xyz" value="-0.000991 ${foot_inertial_y} -0.00113" />
+            <xacro:property name="foot_inertial_xy" value="6E-06" />
+            <xacro:property name="foot_inertial_yz" value="7E-06" />
+        </xacro:if>
+        <xacro:if value="${leg_name == 'RR'}">
+            <xacro:property name="base_to_hip_xyz" value="-${base_to_hip_x} -${base_to_hip_y} 0" />
+            <xacro:property name="hip_inertial_xyz" value="${hip_inertial_x} ${hip_inertial_y} 0" />
+            <xacro:property name="hip_collision" value="0 -${hip_collision_y} 0" />
+            <xacro:property name="thigh_inertial_xyz" value="-0.006279 ${thigh_inertial_y} -0.057835" />
+            <xacro:property name="thigh_inertial_xy" value="-0.00087781" />
+            <xacro:property name="thigh_inertial_yz" value="-0.0083537" />
+            <xacro:property name="hip_to_thigh_xyz" value="0 -${hip_to_thigh_y} 0" />
+            <xacro:property name="calf_inertial_xyz" value="0.005278 -${calf_inertial_y} -0.29778" />
+            <xacro:property name="calf_inertial_xy" value="-0.000221" />
+            <xacro:property name="calf_inertial_yz" value="-0.002093" />
+            <xacro:property name="thigh_to_calf_xyz" value="0 ${thigh_to_calf_y} -0.35" />
+            <xacro:property name="foot_inertial_xyz" value="-0.000991 -${foot_inertial_y} -0.00113" />
+            <xacro:property name="foot_inertial_xy" value="-6E-06" />
+            <xacro:property name="foot_inertial_yz" value="-7E-06" />
+        </xacro:if>
+
+
+        <!-- HIP -->
+        <link name="${prefix}${leg_name}_hip">
+            <inertial>
+                <origin xyz="${hip_inertial_xyz}" rpy="0 0 0" />
+                <mass value="${hip_mass}" />
+                <inertia ixx="0.0033188" ixy="7.16E-05" ixz="-3.77E-07" iyy="0.0048743" iyz="4E-09" izz="0.0037087" />
+            </inertial>
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="file://$(find qped_description)/meshes/b2/${leg_name}_hip.dae" />
+                </geometry>
+            </visual>
+            <collision>
+                <origin xyz="${hip_collision}" rpy="1.5707963267948966 0 0" />
+                <geometry>
+                    <cylinder length="0.05" radius="0.07" />
+                </geometry>
+            </collision>
+        </link>
+        <joint name="${prefix}${leg_name}_hip_joint" type="revolute">
+            <origin xyz="${base_to_hip_xyz}" rpy="0 0 0" />
+            <parent link="${prefix}base_link" />
+            <child link="${prefix}${leg_name}_hip" />
+            <axis xyz="1 0 0" />
+            <limit lower="-0.87" upper="0.87" effort="$(arg max_hip_effort)" velocity="$(arg max_hip_velocity)" />
+        </joint>
+
+        <!-- THIGH -->
+        <link name="${prefix}${leg_name}_thigh"> 
+            <inertial>
+                <origin xyz="${thigh_inertial_xyz}" rpy="0 0 0" />
+                <mass value="${thigh_mass}" />
+                <inertia ixx="0.062299" ixy="${thigh_inertial_xy}" ixz="-0.0036475" iyy="0.061399" iyz="${thigh_inertial_yz}" izz="0.0081997" />
+            </inertial>
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="file://$(find qped_description)/meshes/b2/${leg_name}_thigh.dae" />
+                </geometry>
+            </visual>
+            <collision>
+                <origin xyz="-0.03 0 -0.2" rpy="0 1.57 0" />
+                <geometry>
+                    <box size="0.25 0.028 0.04" />
+                </geometry>
+            </collision>
+        </link>
+        <joint name="${prefix}${leg_name}_thigh_joint" type="revolute">
+            <origin xyz="${hip_to_thigh_xyz}" rpy="0 0 0" />
+            <parent link="${prefix}${leg_name}_hip" />
+            <child link="${prefix}${leg_name}_thigh" />
+            <axis xyz="0 1 0" />
+            <limit lower="-0.94" upper="4.69" effort="$(arg max_thigh_effort)" velocity="$(arg max_thigh_velocity)" />
+        </joint>
+
+        <!-- CALF -->
+        <link name="${prefix}${leg_name}_calf">
+            <inertial>
+                <origin xyz="${calf_inertial_xyz}" rpy="0 0 0" />
+                <mass value="${calf_mass}" />
+                <inertia ixx="0.029283" ixy="${calf_inertial_xy}" ixz="-0.001064" iyy="0.030868" iyz="${calf_inertial_yz}" izz="0.00326" />
+            </inertial>
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="file://$(find qped_description)/meshes/b2/${leg_name}_calf.dae" />
+                </geometry>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="file://$(find qped_description)/meshes/b2/${leg_name}_calf.dae" />
+                </geometry>
+            </collision>
+        </link>
+        <joint name="${prefix}${leg_name}_calf_joint" type="revolute">
+            <origin xyz="${thigh_to_calf_xyz}" rpy="0 0 0" />
+            <parent link="${prefix}${leg_name}_thigh" />
+            <child link="${prefix}${leg_name}_calf" />
+            <axis xyz="0 1 0" />
+            <limit lower="-2.82" upper="-0.43" effort="$(arg max_calf_effort)" velocity="$(arg max_calf_velocity)" />
+        </joint>
+
+        <!-- FOOT -->
+        <link name="${prefix}${leg_name}_foot">
+            <inertial>
+                <origin xyz="${foot_inertial_xyz}" rpy="0 0 0" />
+                <mass value="${foot_mass}" />
+                <inertia ixx="0.004121" ixy="${foot_inertial_xy}" ixz="-4.8E-05" iyy="0.007776" iyz="${foot_inertial_yz}" izz="0.004108" />
+            </inertial>
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="file://$(find qped_description)/meshes/b2/${leg_name}_foot.dae" />
+                </geometry>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="file://$(find qped_description)/meshes/b2/${leg_name}_foot.dae" />
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- TODO: Wheels -->
+        <!-- <joint name="${prefix}${leg_name}_foot_joint" type="continuous">
+            <origin xyz="0 0 -0.35" rpy="0 0 0" />
+            <parent link="${prefix}${leg_name}_calf" /> 
+            <child link="${prefix}${leg_name}_foot" />
+            <axis xyz="0 1 0" />
+            <limit effort="$(arg max_foot_effort)" velocity="$(arg max_foot_velocity)" />
+        </joint> -->
+        <xacro:fixed_joint name="${prefix}${leg_name}_foot_joint" parent="${prefix}${leg_name}_calf" child="${prefix}${leg_name}_foot" xyz="0 0 -0.35" />
+
+        <xacro:empty_link name="${prefix}${leg_name}_ee" />
+        <xacro:fixed_joint name="${prefix}${leg_name}_ee_joint" parent="${prefix}${leg_name}_foot" child="${prefix}${leg_name}_ee" xyz="0 0 -${lower_leg_to_foot_z}" />
+
+        <!-- ROS2 CONTROL -->
+        <ros2_control name="${prefix}${leg_name}_GazeboSimSystem" type="system">
+            <hardware>
+                <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+            </hardware>
+            <joint name="${prefix}${leg_name}_hip_joint">
+                <command_interface name="position">
+                    <param name="min">-${pi}</param>
+                    <param name="max">${pi}</param>
+                </command_interface>
+                <state_interface name="position" >
+                    <param name="initial_value">0.0</param>
+                </state_interface>
+                <state_interface name="velocity" />
+                <state_interface name="effort" />
+            </joint>
+            <joint name="${prefix}${leg_name}_thigh_joint">
+                <command_interface name="position">
+                    <param name="min">-${pi}</param>
+                    <param name="max">${pi}</param>
+                </command_interface>
+                <state_interface name="position" >
+                    <param name="initial_value">1.0880125522613525</param>
+                </state_interface>
+                <state_interface name="velocity" />
+                <state_interface name="effort" />
+            </joint>
+            <joint name="${prefix}${leg_name}_calf_joint">
+                <command_interface name="position">
+                    <param name="min">-${pi}</param>
+                    <param name="max">${pi}</param>
+                </command_interface>
+                <state_interface name="position" >
+                    <param name="initial_value">-2.01871919631958</param>
+                </state_interface>
+                <state_interface name="velocity" />
+                <state_interface name="effort" />
+            </joint>
+        </ros2_control>
+    </xacro:macro>
+</robot>

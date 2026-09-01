@@ -1,0 +1,17 @@
+octomap_server:
+  ros__parameters:
+    publish_projected_map: true
+    frame_id: 'map'
+    resolution: 0.1
+    # Raycasting / sensor model
+    sensor_model:
+      max_range: 10.0          # cast rays out to this distance
+      hit: 0.7
+      miss: 0.4
+    clamping_thres_min: 0.12
+    clamping_thres_max: 0.97
+    pointcloud_min_z: -0.5
+    pointcloud_max_z:  3.0
+    publish_free_space: False
+    filter_ground: False
+    filter_speckles: True

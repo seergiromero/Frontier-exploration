@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>frontier_exploration_manager</name>
+  <version>0.0.1</version>
+
+  <description>A top-level frontier exploration orchestrator for explore_lite + Nav2 + PlanSys2</description>
+
+  <maintainer email="angel.santamaria@upc.edu">Angel Santamaria-Navarro</maintainer>
+  <license>Apache-2.0</license>
+
+  <!-- Build tool -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Runtime and build dependencies -->
+  <depend>rclcpp</depend>
+  <depend>rclcpp_action</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>nav2_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>map_msgs</depend>
+  <depend>nav2_costmap_2d</depend>
+
+  <depend>explore_lite</depend>
+  <depend>frontier_exploration_manager_interfaces</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

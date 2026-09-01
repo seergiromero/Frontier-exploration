@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<robot name="spot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:arg name="name" default="spot" />
+    <xacro:if value="${len('$(arg name)') == 0}">
+        <xacro:arg name="prefix" default="" />
+    </xacro:if>
+    <xacro:unless value="${len('$(arg name)') == 0}">
+        <xacro:arg name="prefix" default="$(arg name)/" />
+    </xacro:unless>
+
+    <xacro:arg name="rendering_target" default="urdf" />
+    <xacro:arg name="simulate_cameras" default="True" />
+    <xacro:arg name="simulate_imu" default="True" />
+
+    <xacro:arg name="body_color_r" default="${str(234/255.0)}" />
+    <xacro:arg name="body_color_g" default="${str(167/255.0)}" />
+    <xacro:arg name="body_color_b" default="0" />
+
+    <xacro:include filename="../common/utils.xacro" />
+    <xacro:include filename="spot_constants.urdf.xacro" />
+    <xacro:include filename="spot_leg.urdf.xacro" />
+    <xacro:include filename="spot_depth_camera.xacro" />
+    <xacro:include filename="spot.gazebo.xacro" />
+    <xacro:spot_gazebo prefix="$(arg prefix)" />
+
+    <!-- BODY -->
+    <link name="$(arg prefix)body">
+        <visual>
+            <geometry>
+                <mesh filename="file://$(find qped_description)/meshes/$(arg prefix)body.dae" />
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <!-- <mesh filename="file://$(find qped_description)/meshes/$(arg prefix)body_collision.stl" /> -->
+                <box size="${base_length} ${base_width} ${base_height}"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="${base_mass}"/>
+            <inertia ixx="${(1/12) * base_mass * (base_width * base_width + base_height * base_height)}" ixy="0.0" ixz="0.0"
+                        iyy="${(1/12) * base_mass * (base_length * base_length + base_height * base_height)}" iyz="0.0"
+                        izz="${(1/12) * base_mass * (base_length * base_length + base_width * base_width)}" />     
+        </inertial>
+    </link>
+    <link name="$(arg prefix)base_link"/>
+    <joint name="$(arg prefix)base_link_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="$(arg prefix)base_link" />
+        <child link="$(arg prefix)body" />
+    </joint>
+
+    <!-- BATTERY -->
+    <link name="$(arg prefix)battery">
+        <visual>
+            <geometry>
+                <box size="0.324 0.168 0.093" />
+            </geometry>
+            <material name="spot_color">
+                <color rgba="$(arg body_color_r) $(arg body_color_g) $(arg body_color_b) 1.0" />
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.324 0.168 0.093" />
+            </geometry>
+        </collision>
+        <xacro:box_inertial mass="4.0" depth="0.324" width="0.168" height="0.093" />
+    </link>
+    <xacro:solid_color_link_material link="$(arg prefix)battery" r="$(arg body_color_r)" g="$(arg body_color_g)" b="$(arg body_color_b)" />
+    <xacro:fixed_joint name="$(arg prefix)battery_joint" parent="$(arg prefix)base_link" child="$(arg prefix)battery" xyz="0 0 -0.03" />
+
+    <!-- TOP RAILS -->
+    <xacro:empty_link name="$(arg prefix)front_rail" />
+    <xacro:fixed_joint name="front_rail_joint" parent="$(arg prefix)body" child="$(arg prefix)front_rail" xyz="0.223 0 0.0805" />
+    <xacro:empty_link name="$(arg prefix)rear_rail" />
+    <xacro:fixed_joint name="rear_rail_joint" parent="$(arg prefix)body" child="$(arg prefix)rear_rail" xyz="-0.223 0 0.0805" />
+
+    <!-- LEGS -->
+    <xacro:spot_leg leg_name="front_left" prefix="$(arg prefix)" />
+    <xacro:spot_leg leg_name="front_right" prefix="$(arg prefix)" />
+    <xacro:spot_leg leg_name="rear_left" prefix="$(arg prefix)" />
+    <xacro:spot_leg leg_name="rear_right" prefix="$(arg prefix)" />
+
+    <!-- IMU -->
+    <xacro:empty_link name="$(arg prefix)imu_link" />
+    <xacro:fixed_joint name="$(arg prefix)imu_j" parent="$(arg prefix)base_link" child="$(arg prefix)imu_link" />
+
+    <!-- CAMERAS -->
+
+    <!-- Front-left -->
+    <xacro:empty_link name="$(arg prefix)fl_dc_link" />
+    <xacro:fixed_joint name="$(arg prefix)fl_dc_j" 
+        parent="$(arg prefix)base_link" child="$(arg prefix)fl_dc_link" 
+        xyz="0.415 0.037 -0.01" rpy="1.355558 0.353917 -0.554196" />
+    <xacro:empty_link name="$(arg prefix)fl_dc_link_optical_frame" />
+    <xacro:fixed_joint name="$(arg prefix)fl_dc_link_optical_frame_joint" 
+        parent="$(arg prefix)fl_dc_link" child="$(arg prefix)fl_dc_link_optical_frame"
+        xyz="0 0 0" rpy="0 0 0" />
+    <xacro:empty_link name="$(arg prefix)fl_dc_link_depth_frame" />
+    <xacro:fixed_joint name="$(arg prefix)fl_dc_link_depth_frame_joint" 
+        parent="$(arg prefix)fl_dc_link_optical_frame" child="$(arg prefix)fl_dc_link_depth_frame"/>
+    <xacro:spot_depth_camera prefix="$(arg prefix)" name="camera/frontleft" camera_link="fl_dc_link" />
+
+    <!-- Front-right -->
+    <xacro:empty_link name="$(arg prefix)fr_dc_link" />
+    <xacro:fixed_joint name="$(arg prefix)fr_dc_j" 
+        parent="$(arg prefix)base_link" child="$(arg prefix)fr_dc_link" 
+        xyz="0.415 -0.037 -0.01" rpy="-1.355558 0.353917 0.554196" />
+    <xacro:empty_link name="$(arg prefix)fr_dc_link_optical_frame" />
+    <xacro:fixed_joint name="$(arg prefix)fr_dc_link_optical_frame_joint" 
+        parent="$(arg prefix)fr_dc_link" child="$(arg prefix)fr_dc_link_optical_frame" />
+    <xacro:empty_link name="$(arg prefix)fr_dc_link_depth_frame" />
+    <xacro:fixed_joint name="$(arg prefix)fr_dc_link_depth_frame_joint" 
+        parent="$(arg prefix)fr_dc_link_optical_frame" child="$(arg prefix)fr_dc_link_depth_frame"/>
+    <xacro:spot_depth_camera prefix="$(arg prefix)" name="camera/frontright" camera_link="fr_dc_link" />
+
+    <!-- Left -->
+    <xacro:empty_link name="$(arg prefix)l_dc_link" />
+    <xacro:fixed_joint name="$(arg prefix)l_dc_j" 
+        parent="$(arg prefix)base_link" child="$(arg prefix)l_dc_link" 
+        xyz="-0.125 0.12 0.03" rpy="0 0.2 ${pi/2}" />
+    <xacro:empty_link name="$(arg prefix)l_dc_link_optical_frame" />
+    <xacro:fixed_joint name="$(arg prefix)l_dc_link_optical_frame_joint" 
+        parent="$(arg prefix)l_dc_link" child="$(arg prefix)l_dc_link_optical_frame" />
+    <xacro:empty_link name="$(arg prefix)l_dc_link_depth_frame" />
+    <xacro:fixed_joint name="$(arg prefix)l_dc_link_depth_frame_joint" 
+        parent="$(arg prefix)l_dc_link_optical_frame" child="$(arg prefix)l_dc_link_depth_frame"/>
+    <xacro:spot_depth_camera prefix="$(arg prefix)" name="camera/left" camera_link="l_dc_link" />
+
+    <!-- Right -->
+    <xacro:empty_link name="$(arg prefix)r_dc_link" />
+    <xacro:fixed_joint name="$(arg prefix)r_dc_j" 
+        parent="$(arg prefix)base_link" child="$(arg prefix)r_dc_link" 
+        xyz="-0.125 -0.12 0.035" rpy="0 0.2 ${-pi/2}" />
+    <xacro:empty_link name="$(arg prefix)r_dc_link_optical_frame" />
+    <xacro:fixed_joint name="$(arg prefix)r_dc_link_optical_frame_joint" 
+        parent="$(arg prefix)r_dc_link" child="$(arg prefix)r_dc_link_optical_frame" />
+    <xacro:empty_link name="$(arg prefix)r_dc_link_depth_frame" />
+    <xacro:fixed_joint name="$(arg prefix)r_dc_link_depth_frame_joint" 
+        parent="$(arg prefix)r_dc_link_optical_frame" child="$(arg prefix)r_dc_link_depth_frame"/>
+    <xacro:spot_depth_camera prefix="$(arg prefix)" name="camera/right" camera_link="r_dc_link" />
+
+    <!-- Back -->
+    <xacro:empty_link name="$(arg prefix)b_dc_link" />
+    <xacro:fixed_joint name="$(arg prefix)b_dc_j" 
+        parent="$(arg prefix)base_link" child="$(arg prefix)b_dc_link" 
+        xyz="-0.425 0 0.01" rpy="0 0.3 ${-pi}" />
+    <xacro:empty_link name="$(arg prefix)b_dc_link_optical_frame" />
+    <xacro:fixed_joint name="$(arg prefix)b_dc_link_optical_frame_joint" 
+        parent="$(arg prefix)b_dc_link" child="$(arg prefix)b_dc_link_optical_frame" />
+    <xacro:empty_link name="$(arg prefix)b_dc_link_depth_frame" />
+    <xacro:fixed_joint name="$(arg prefix)b_dc_link_depth_frame_joint" 
+        parent="$(arg prefix)b_dc_link_optical_frame" child="$(arg prefix)b_dc_link_depth_frame"/>
+    <xacro:spot_depth_camera prefix="$(arg prefix)" name="camera/back" camera_link="b_dc_link" />
+
+</robot>
+

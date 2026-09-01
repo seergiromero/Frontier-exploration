@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<robot name="unitree_spot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+ 
+    <xacro:macro name="spot_gazebo" params="prefix">
+
+        <!-- GENERAL -->
+        <gazebo>
+
+            <!-- =============== -->
+            <!-- GENERAL GAZEBO PLUGINS-->
+            <!--IMU -->
+            <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
+            <!--Cameras -->
+            <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+                <render_engine>ogre</render_engine>
+            </plugin>
+            <!-- Odometer-->
+            <plugin filename="OdometerSystem" name="custom::OdometerSystem" />
+            <!-- Custom plugin -->
+            <plugin filename="CustomComponentPlugin" name="champGazebo::CustomComponentPlugin" />
+            <!-- =============== -->
+
+            <!-- ROS2 CONTROL -->
+            <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin" filename="gz_ros2_control-system">
+                <parameters>$(find qped_bringup)/config/spot_ros2_control.yaml</parameters>
+            </plugin>
+
+            <!-- ODOMETRY -->
+            <!-- https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/odometry_publisher/OdometryPublisher.cc -->
+            <plugin filename="libgz-sim-odometry-publisher-system.so" name="gz::sim::systems::OdometryPublisher">
+                <odom_frame>${prefix}odom</odom_frame>
+                <xyz_offset>0.0 0.0 0.0</xyz_offset>
+                <rpy_offset>0.0 0.0 0.0</rpy_offset>
+                <gaussian_noise>0.00001</gaussian_noise>
+                <robot_base_frame>${prefix}base_link</robot_base_frame>
+                <dimensions>3</dimensions>
+                <odom_publish_frequency>100.0</odom_publish_frequency>
+            </plugin>
+        
+        </gazebo>
+
+        <!-- BATTERY -->
+        <!-- https://github.com/gazebosim/gz-sim/blob/gz-sim8/examples/worlds/linear_battery_demo.sdf -->
+        <gazebo reference="$(arg prefix)battery">
+            <plugin filename="gz-sim-linearbatteryplugin-system" name="gz::sim::systems::LinearBatteryPlugin">
+                <open_circuit_voltage_constant_coef>12.592</open_circuit_voltage_constant_coef>
+                <open_circuit_voltage_linear_coef>12.592</open_circuit_voltage_linear_coef>
+                <capacity>1.2009</capacity>
+                <initial_charge>1.2</initial_charge>
+                <resistance>0.0</resistance>
+                <smooth_current_tau>1.0</smooth_current_tau>
+                <fix_issue_225>true</fix_issue_225>
+                <battery_name>linear_battery</battery_name>
+                <voltage>12.592</voltage>
+                <enable_recharge>true</enable_recharge>
+                <!-- charging I = c / t, discharging I = P / V,
+                charging I should be > discharging I -->
+                <charging_time>3.0</charging_time>
+                <recharge_by_topic>true</recharge_by_topic>
+                <!-- Consumer-specific -->
+                <power_load>2.1</power_load>
+                <start_draining>false</start_draining>
+                <power_draining_topic></power_draining_topic>
+                <stop_power_draining_topic></stop_power_draining_topic>
+            </plugin>
+        </gazebo>
+
+        <!-- IMU -->
+        <gazebo reference="${prefix}imu_link">
+            <sensor name="${prefix}imu" type="imu">
+                <always_on>1</always_on>
+                <update_rate>50</update_rate>
+                <enable_orientation>0</enable_orientation>
+                <visualize>true</visualize>
+                <topic>/model/${prefix}imu</topic>
+                <gz_frame_id>${prefix}imu_link</gz_frame_id>
+                <enable_metrics>true</enable_metrics>
+                <imu>
+                    <enable_orientation>0</enable_orientation>
+                    <angular_velocity>
+                        <xacro:macro name="angular_imu_noise">
+                            <noise type="gaussian">
+                                <mean>0</mean>
+                                <stddev>0.009</stddev>
+                                <bias_mean>0.00075</bias_mean>
+                                <bias_stddev>0.005</bias_stddev>
+                                <dynamic_bias_stddev>0.00002</dynamic_bias_stddev>
+                                <dynamic_bias_correlation_time>400.0</dynamic_bias_correlation_time>
+                                <precision>0.00025</precision>
+                            </noise>
+                        </xacro:macro>
+                        <x><xacro:angular_imu_noise /></x>
+                        <y><xacro:angular_imu_noise /></y>
+                        <z><xacro:angular_imu_noise /></z>
+                    </angular_velocity>
+                    <linear_acceleration>
+                        <xacro:macro name="linear_imu_noise">
+                            <noise type="gaussian">
+                                <mean>0</mean>
+                                <stddev>0.021</stddev>
+                                <bias_mean>0.05</bias_mean>
+                                <bias_stddev>0.0075</bias_stddev>
+                                <dynamic_bias_stddev>0.000375</dynamic_bias_stddev>
+                                <dynamic_bias_correlation_time>175.0</dynamic_bias_correlation_time>
+                                <precision>0.005</precision>
+                            </noise>
+                        </xacro:macro>
+                        <x><xacro:linear_imu_noise /></x>
+                        <y><xacro:linear_imu_noise /></y>
+                        <z><xacro:linear_imu_noise /></z>
+                    </linear_acceleration>
+                </imu>
+            </sensor>
+        </gazebo>
+
+    </xacro:macro>
+</robot>
+

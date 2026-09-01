@@ -1,0 +1,13 @@
+navsat_transform_node:
+  ros__parameters:
+    frequency: 20.0
+    map_frame: map
+    odom_frame: b2/odom
+    base_link_frame: b2/base_link
+    publish_transform: false
+    publish_filtered_gps: false
+    broadcast_utm_transform: false
+    use_odometry_yaw: true # not to trust the magnetometer of the IMU later on
+    wait_for_datum: false
+    zero_altitude: false
+    magnetic_declination_radians: 0.0

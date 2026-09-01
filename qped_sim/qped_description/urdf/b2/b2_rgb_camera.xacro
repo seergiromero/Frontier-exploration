@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:macro name="b2_camera" params="prefix name camera_link visualize:=0" >
+
+        <gazebo reference="${prefix}${camera_link}_optical_frame">
+            <!-- Grayscale camera -->
+            <sensor name="${prefix}${camera_link}_optical_frame" type="camera">
+                <pose>0 0 0 0 0 0</pose>
+                <update_rate>30</update_rate>
+                <visualize>${visualize}</visualize>
+                <topic>/model/${prefix}${name}/rgb/image_raw</topic>
+                <frame_id>${prefix}${camera_link}_optical_frame</frame_id>
+                <gz_frame_id>${prefix}${camera_link}_optical_frame</gz_frame_id>
+                <camera name="d435">
+                    <horizontal_fov>${radians(102.35)}</horizontal_fov>
+                    <image>
+                        <width>1280</width>
+                        <height>960</height>
+                        <format>R8G8B8</format>
+                    </image>
+                    <clip>
+                        <near>0.1</near>
+                        <far>20.0</far>
+                    </clip>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.007</stddev>
+                    </noise>
+                    <lens>
+                        <intrinsics>
+                            <fx>640</fx>
+                            <fy>640</fy>
+                            <cx>640</cx>
+                            <cy>480</cy>
+                            <s>0</s>
+                        </intrinsics>
+                    </lens>
+                </camera>
+            </sensor>
+        </gazebo>
+    </xacro:macro>
+</robot>

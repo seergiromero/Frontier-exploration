@@ -1,0 +1,25 @@
+frontier_exploration_manager:
+  ros__parameters:
+
+    # Map / robot config
+    robot_base_frame: "b2/base_link"
+    costmap_topic: "/map"  # consumed by Costmap2DClient
+    # costmap_updates_topic: "/map_updates"  # if needed
+
+    # Planner timing
+    planner_frequency: 1.0
+    progress_timeout: 30.0
+
+    # Frontier scoring
+    potential_scale: 0.001
+    orientation_scale: 0.0
+    gain_scale: 1.0
+    min_frontier_size: 0.5
+
+    # Behavior
+    return_to_init: true   # or false
+    visualize: true        # to see markers
+
+    # Manager-specific
+    auto_start: false       # or false if PlanSys2 will start it
+    nav2_action_name: "navigate_to_pose"

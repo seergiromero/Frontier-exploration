@@ -1,0 +1,12 @@
+# Goal
+string area
+
+---
+# Result
+bool success
+string summary
+
+---
+# Feedback
+string status
+bool returning_home

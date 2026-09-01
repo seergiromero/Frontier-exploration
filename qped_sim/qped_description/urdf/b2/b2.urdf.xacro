@@ -1,0 +1,237 @@
+<?xml version="1.0"?>
+<robot name="b2" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:arg name="name" default="b2" />
+    <xacro:if value="${len('$(arg name)') == 0}">
+        <xacro:arg name="prefix" default="" />
+    </xacro:if>
+    <xacro:unless value="${len('$(arg name)') == 0}">
+        <xacro:arg name="prefix" default="$(arg name)/" />
+    </xacro:unless>
+
+    <xacro:include filename="../common/utils.xacro" />
+    <xacro:include filename="b2_constants.urdf.xacro" />
+    <xacro:include filename="b2_leg.urdf.xacro" />
+    <xacro:include filename="b2.gazebo.xacro" />
+    <xacro:include filename="b2_rgb_camera.xacro" />
+    <xacro:include filename="b2_depth_camera.xacro" />
+    <xacro:b2_gazebo prefix="$(arg prefix)" />
+
+    <link name="$(arg prefix)body">
+        <inertial>
+            <origin xyz="0.000458 0.005261 0.000665" rpy="0 0 0" />
+            <mass value="35.606" />
+            <inertia ixx="0.27466" ixy="-0.000622" ixz="0.00315" iyy="1.0618" iyz="-0.00139" izz="1.1825" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="file://$(find qped_description)/meshes/$(arg prefix)base_link.dae" />
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <box size="0.5 0.28 0.15" />
+                </geometry>
+        </collision>
+    </link>
+
+    <link name="$(arg prefix)base_link"/>
+    <joint name="$(arg prefix)base_link_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="$(arg prefix)base_link" />
+        <child link="$(arg prefix)body" />
+    </joint>
+
+    <link name="$(arg prefix)f_dc_link">
+        <inertial>
+            <origin xyz="3.47E-18 0 5.55E-17" rpy="0 0 0" />
+            <mass value="4.19E-15" />
+            <inertia ixx="1.68E-27" ixy="-9.81E-45" ixz="-2.54E-44" iyy="1.68E-27" iyz="0" izz="1.68E-27" />
+        </inertial>
+    </link>
+    <joint name="$(arg prefix)joint_f_dc" type="fixed">
+        <origin xyz="0.42161 0.025 0.061851" rpy="-2.3562 0 -1.5708" />
+        <parent link="$(arg prefix)base_link" />
+        <child link="$(arg prefix)f_dc_link" />
+        <axis xyz="0 0 0" />
+    </joint>
+    <link name="$(arg prefix)r_dc_link">
+        <inertial>
+            <origin xyz="-7.46E-16 -3.33E-16 -1.11E-15" rpy="0 0 0" />
+            <mass value="4.19E-15" />
+            <inertia ixx="1.68E-27" ixy="-4.31E-44" ixz="2.48E-45" iyy="1.68E-27" iyz="0" izz="1.68E-27" />
+        </inertial>
+    </link>
+    <joint name="$(arg prefix)joint_b_dc" type="fixed">
+        <origin xyz="-0.42244 -0.025 0.038026" rpy="-2.3562 0 1.5708" />
+        <parent link="$(arg prefix)base_link" />
+        <child link="$(arg prefix)r_dc_link" />
+        <axis xyz="0 0 0" />
+    </joint>
+    <link name="$(arg prefix)head_Link">
+        <inertial>
+            <origin xyz="0.33989 -0.000168 0.12029" rpy="0 0 0" />
+            <mass value="3.6885" />
+            <inertia ixx="0.026455" ixy="3.15E-05" ixz="0.00166" iyy="0.029221" iyz="-3.27E-05" izz="0.010918" />
+        </inertial>
+        <collision>
+            <origin xyz="0.41 0 0.005" rpy="0 0 0" />
+            <geometry>
+                <box size="0.04 0.12 0.14" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="$(arg prefix)joint_head" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="$(arg prefix)base_link" />
+        <child link="$(arg prefix)head_Link" />
+        <axis xyz="0 0 0" />
+    </joint>
+    <link name="$(arg prefix)tail_link">
+        <inertial>
+            <origin xyz="-0.37448 0.000488 0.006495" rpy="0 0 0" />
+            <mass value="0.795" />
+            <inertia ixx="0.0028118" ixy="1.95E-05" ixz="-7.87E-06" iyy="0.0047506" iyz="-1.57E-05" izz="0.0029154" />
+        </inertial>
+        <collision>
+            <origin xyz="-0.405 0 0.005" rpy="0 0 0" />
+            <geometry>
+                <box size="0.025 0.12 0.14" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="$(arg prefix)joint_tail" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="$(arg prefix)base_link" />
+        <child link="$(arg prefix)tail_link" />
+        <axis xyz="0 0 0" />
+    </joint>
+    <link name="$(arg prefix)f_oc_link">
+        <inertial>
+            <origin xyz="-3.39E-15 1.46E-16 -6.11E-16" rpy="0 0 0" />
+            <mass value="4.19E-15" />
+            <inertia ixx="1.68E-27" ixy="-3.89E-44" ixz="5.04E-44" iyy="1.68E-27" iyz="2.81E-45" izz="1.68E-27" />
+        </inertial>
+    </link>
+    <joint name="$(arg prefix)joint_f_oc_link" type="fixed">
+        <origin xyz="0.3993 0 -0.01576" rpy="-1.5708 0 -1.5708" />
+        <parent link="$(arg prefix)base_link" />
+        <child link="$(arg prefix)f_oc_link" />
+        <axis xyz="0 0 0" />
+    </joint>
+    <link name="$(arg prefix)logo_link">
+        <inertial>
+            <origin xyz="0 -2.3E-23 0" rpy="0 0 0" />
+            <mass value="4.19E-15" />
+            <inertia ixx="1.68E-27" ixy="0" ixz="0" iyy="1.68E-27" iyz="0" izz="1.68E-27" />
+        </inertial>
+    </link>
+    <joint name="$(arg prefix)joint_logo" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="$(arg prefix)base_link" />
+        <child link="$(arg prefix)logo_link" />
+        <axis xyz="0 0 0" />
+    </joint>
+    <link name="$(arg prefix)r_oc_link">
+        <inertial>
+            <origin xyz="-0.39143 1.52E-07 -0.011961" rpy="0 0 0" />
+            <mass value="4.19E-12" />
+            <inertia ixx="1.68E-22" ixy="9.03E-39" ixz="0" iyy="1.68E-22" iyz="-1.2E-38" izz="1.68E-22" />
+        </inertial>
+    </link>
+    <joint name="$(arg prefix)joint_r_oc" type="fixed">
+        <origin xyz="-0.39143 0 -0.026131" rpy="-1.5708 0 1.5708" />
+        <parent link="$(arg prefix)base_link" />
+        <child link="$(arg prefix)r_oc_link" />
+        <axis xyz="0 0 0" />
+    </joint>
+
+
+    <xacro:b2_leg leg_name="FL" prefix="$(arg prefix)" />
+    <xacro:b2_leg leg_name="FR" prefix="$(arg prefix)" />
+    <xacro:b2_leg leg_name="RL" prefix="$(arg prefix)" />
+    <xacro:b2_leg leg_name="RR" prefix="$(arg prefix)" />
+
+    <!-- ===================================-->
+    <!-- SENSOR LINK/JOINTS -->
+    <!-- ===================================-->
+
+    <!-- LIDAR -->
+    <link name="$(arg prefix)lidar_link">
+        <inertial>
+            <origin xyz="0.0 0 0.0" rpy="0 0 0" />
+            <mass value="4.19E-15" />
+            <inertia ixx="1.68E-27" ixy="-3.2E-45" ixz="7.68E-44" iyy="1.68E-27" iyz="-9.26E-47" izz="1.68E-27" />
+        </inertial>
+        <collision>
+            <origin xyz="0 0 -0.02" rpy="0 0 0" />
+            <geometry>
+                <cylinder length="0.16" radius="0.076" />
+                <!-- <mesh filename="file://$(find qped_description)/meshes/$(arg prefix)lidar_link.STL" /> -->
+            </geometry>
+        </collision>
+    </link>
+    <joint name="$(arg prefix)joint_lidar" type="fixed">
+        <origin xyz="0.34218 0 0.17851" rpy="0 0 0" />
+        <parent link="$(arg prefix)base_link" />
+        <child link="$(arg prefix)lidar_link" />
+        <axis xyz="0 0 0" />
+    </joint>
+
+    <!-- IMU -->
+    <link name="$(arg prefix)imu_link">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="4.19E-15" />
+            <inertia ixx="1.68E-27" ixy="1.84E-44" ixz="-7.35E-44" iyy="1.68E-27" iyz="-3.67E-44" izz="1.68E-27" />
+        </inertial>
+    </link>
+    <joint name="$(arg prefix)joint_imu" type="fixed">
+        <origin xyz="0 -0.02341 0.04927" rpy="0 0 0" />
+        <parent link="$(arg prefix)base_link" />
+        <child link="$(arg prefix)imu_link" />
+        <axis xyz="0 0 0" />
+    </joint>
+
+    <!-- OPTICAL CAMERAS -->
+    <xacro:b2_camera prefix="$(arg prefix)" name="camera/front" camera_link="f_oc_link" />
+    <xacro:empty_link name="$(arg prefix)f_oc_link_optical_frame" />
+    <xacro:fixed_joint name="$(arg prefix)f_oc_link_optical_frame_joint" 
+        parent="$(arg prefix)f_oc_link" child="$(arg prefix)f_oc_link_optical_frame"
+        xyz="0 0 0" rpy="0 ${-pi/2} ${pi/2}" />
+    <xacro:empty_link name="$(arg prefix)f_oc_link_depth_frame" />
+    <xacro:fixed_joint name="$(arg prefix)f_oc_link_depth_frame_joint" 
+        parent="$(arg prefix)f_oc_link_optical_frame" child="$(arg prefix)f_oc_link_depth_frame"/>
+
+    <xacro:b2_camera prefix="$(arg prefix)" name="camera/back" camera_link="r_oc_link" />
+    <xacro:empty_link name="$(arg prefix)r_oc_link_optical_frame" />
+    <xacro:fixed_joint name="$(arg prefix)r_oc_link_optical_frame_joint" 
+        parent="$(arg prefix)r_oc_link" child="$(arg prefix)r_oc_link_optical_frame"
+        xyz="0 0 0" rpy="0 ${-pi/2} ${pi/2}" />
+    <xacro:empty_link name="$(arg prefix)r_oc_link_depth_frame" />
+    <xacro:fixed_joint name="$(arg prefix)r_oc_link_depth_frame_joint" 
+        parent="$(arg prefix)r_oc_link_optical_frame" child="$(arg prefix)r_oc_link_depth_frame"/>
+
+
+    <!-- DEPTH CAMERAS -->
+    <xacro:b2_depth_camera prefix="$(arg prefix)" name="camera/front" camera_link="f_dc_link" />
+    <xacro:empty_link name="$(arg prefix)f_dc_link_optical_frame" />
+    <xacro:fixed_joint name="$(arg prefix)f_dc_link_optical_frame_joint" 
+        parent="$(arg prefix)f_dc_link" child="$(arg prefix)f_dc_link_optical_frame"
+        xyz="0.025 0 0" rpy="0 ${-pi/2} ${pi/2}" />
+    <xacro:empty_link name="$(arg prefix)f_dc_link_depth_frame" />
+    <xacro:fixed_joint name="$(arg prefix)f_dc_link_depth_frame_joint" 
+        parent="$(arg prefix)f_dc_link_optical_frame" child="$(arg prefix)f_dc_link_depth_frame"/>
+
+    <xacro:b2_depth_camera prefix="$(arg prefix)" name="camera/back" camera_link="r_dc_link" />
+    <xacro:empty_link name="$(arg prefix)r_dc_link_optical_frame" />
+    <xacro:fixed_joint name="$(arg prefix)r_dc_link_optical_frame_joint" 
+        parent="$(arg prefix)r_dc_link" child="$(arg prefix)r_dc_link_optical_frame"
+        xyz="0.025 0 0" rpy="0 ${-pi/2} ${pi/2}" />
+    <xacro:empty_link name="$(arg prefix)r_dc_link_depth_frame" />
+    <xacro:fixed_joint name="$(arg prefix)r_dc_link_depth_frame_joint" 
+        parent="$(arg prefix)r_dc_link_optical_frame" child="$(arg prefix)r_dc_link_depth_frame"/>
+
+</robot>
+

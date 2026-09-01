@@ -1,0 +1,31 @@
+entropy_explorer_node:
+  ros__parameters:
+    # ==================== Basic Control Parameters ====================
+    planner_frequency: 0.10        # Replanning rate (Hz) - lower = less CPU, slower response
+    progress_timeout: 60.0         # Timeout before blacklisting unreachable goals (s)
+    visualize: true                # Enable RViz visualization (adds overhead)
+    return_to_init: false          # Return to start position when done
+    robot_base_frame: "b2/base_link"
+
+
+    # ==================== RRT* Sampling ====================
+    rrt_samples: 800               # Number of RRT* tree nodes per planning cycle
+    rrt_step_size: 3.0             # Max distance between nodes (m) - should be 2-5x robot diameter
+    rrt_goal_bias: 0.6             # Probability to sample high-entropy regions [0-1]
+
+
+    # ==================== Multi-Objective Weights ====================
+    info_gain_weight: 0.5          # Weight for information gain
+    distance_weight: 3.5           # Weight for distance (higher = prefer nearby)
+
+
+    # ==================== Information Gain ====================
+    min_information_gain: 1.5      # Minimum threshold for valid goals
+    sensor_range: 2.0              # Simulated sensor radius (m) - match actual hardware
+
+
+    # ==================== Costmap Integration ====================
+    costmap_topic: "map"                    # Occupancy grid topic (from SLAM)
+    costmap_updates_topic: "map_updates"    # Incremental updates (optional)
+    global_frame: "map"                     # TF fixed frame
+    transform_tolerance: 0.3                # Max TF age before considered stale (s)
