@@ -183,7 +183,7 @@ mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
 
 # Clone this repo
-git clone https://github.com/<your-username>/<your-repo-name>.git
+git clone https://github.com/seergiromero/Frontier-exploration.git
 
 # Install dependencies
 cd ~/ros2_ws
