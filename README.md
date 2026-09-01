@@ -20,7 +20,7 @@ This repository contains two exploration strategies developed as part of my Mast
 
 | Baseline (`explore_lite`, tuned) | Custom (`entropy_explorer`) |
 |:---:|:---:|
-| ![explore_lite result](Frontier-exploration/m-explore/explore/doc/explore_lite.mp4) | ![entropy_explorer result](Frontier-exploration/m-explore/explore/doc/entropy_explorer.mp4) |
+| <video src="https://github.com/user-attachments/assets/b8501510-474f-4c1b-b20c-6d29f9695f2a" controls width="400"></video> | <video src="https://github.com/user-attachments/assets/57e1d1e4-61d1-4579-8ce0-f46f52691abe" controls width="400"></video> |
 | Full coverage of structured rooms, avoiding runaway exploration of open space | RRT* candidates (colored spheres = score) converging on unknown regions near walls |
 
 ---
